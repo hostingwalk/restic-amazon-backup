@@ -21,12 +21,11 @@ $ sudo make install
 
 ### 1. Configure AWS S3 credentials
 Put these files in `/etc/restic/`:
-* `b2_env.sh`: Fill this file out with your B2 bucket settings etc. The reason for putting these in a separate file is that it can be used also for you to simply source, when you want to issue some restic commands. For example:
+* `aws-env.sh`: Fill this file out with your S3 bucket settings. The reason for putting these in a separate file is that it can be used also for you to simply source, when you want to issue some restic commands. For example:
 ```bash
 $ source /etc/restic/aws-env.sh
 $ restic snapshots    # You don't have to supply all parameters like --repo, as they are now in your environment!
 ````
-* `aws-password.txt`: Put your Restic password in this file.
 
 ### 2. Initialize remote repo
 Now we must initialize the repository on the remote end:
