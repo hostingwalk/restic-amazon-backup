@@ -13,8 +13,8 @@ Here follows a step-by step tutorial on how to set it up.
 Tip: The steps in this section will instruct you to copy files from this repo to system directories.
 
 ```bash
-$ git clone https://github.com/erikw/restic-systemd-automatic-backup.git
-$ cd restic-systemd-automatic-backup
+$ git clone https://github.com/hostingwalk/restic-amazon-backup.git
+$ cd hostingwalk/restic-amazon-backup
 $ sudo make install
 ````
 
