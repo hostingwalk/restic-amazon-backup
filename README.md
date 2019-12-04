@@ -14,7 +14,7 @@ Tip: The steps in this section will instruct you to copy files from this repo to
 
 ```bash
 $ git clone https://github.com/hostingwalk/restic-amazon-backup.git
-$ cd hostingwalk/restic-amazon-backup
+$ cd restic-amazon-backup
 $ sudo make install
 ````
 
