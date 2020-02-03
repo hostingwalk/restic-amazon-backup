@@ -13,7 +13,7 @@ Here follows a step-by step tutorial on how to set it up.
 Tip: The steps in this section will instruct you to copy files from this repo to system directories.
 
 ```bash
-$ git clone https://github.com/hostingwalk/restic-amazon-backup.git
+$ git clone https://github.com/payrequestio/restic-amazon-backup.git
 $ cd restic-amazon-backup
 $ sudo make install
 ````
