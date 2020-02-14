@@ -15,6 +15,10 @@ exit_hook() {
 }
 trap exit_hook INT TERM
 
+# Run Daily MySQL Backups
+bash /usr/local/sbin/mysql.sh &
+wait $!
+
 # How many backups to keep.
 RETENTION_DAYS=1
 RETENTION_WEEKS=7
