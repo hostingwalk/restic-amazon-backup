@@ -1,6 +1,6 @@
-# Automatic restic backups using AWS S3 Storage
+# Directadmin VPS Backup solution using S3 Block Storage and Restic agent to backup automaticly via systemd timers and with backup email notifications.
 
-## Restic
+## Powered by Restic
 
 [restic](https://restic.net/) is a command-line tool for making backups.
 
@@ -13,24 +13,24 @@ Here follows a step-by step tutorial on how to set it up.
 Tip: The steps in this section will instruct you to copy files from this repo to system directories.
 
 ```bash
-$ git clone https://github.com/payrequestio/restic-amazon-backup.git
-$ cd restic-amazon-backup
+$ git clone https://github.com/payrequestio/directadmin-vps-backup.git
+$ cd directadmin-vps-backup
 $ sudo make install
 ````
 
 
-### 1. Configure AWS S3 credentials
+### 1. Configure S3 credentials
 Put these files in `/etc/restic/`:
 * `aws-env.sh`: Fill this file out with your S3 bucket settings. The reason for putting these in a separate file is that it can be used also for you to simply source, when you want to issue some restic commands. For example:
 ```bash
-$ source /etc/restic/aws-env.sh
+$ source /etc/restic/env.sh
 $ restic snapshots    # You don't have to supply all parameters like --repo, as they are now in your environment!
 ````
 
 ### 2. Initialize remote repo
 Now we must initialize the repository on the remote end:
 ```bash
-source /etc/restic/aws-env.sh
+source /etc/restic/env.sh
 restic init
 ```
 
@@ -61,8 +61,8 @@ Put these files in `/etc/systemd/system/`:
 
 Now simply enable the timer with:
 ```bash
-$ systemctl start restic-backup.timer
-$ systemctl enable restic-backup.timer
+$ systemctl start directadmin-vps-backup.timer
+$ systemctl enable directadmin-vps-backup.timer
 ````
 
 You can see when your next backup is scheduled to run with
@@ -73,13 +73,13 @@ $ systemctl list-timers | grep restic
 and see the status of a currently running backup with
 
 ```bash
-$ systemctl status restic-backup
+$ systemctl status directadmin-vps-backup
 ```
 
 or start a backup manually
 
 ```bash
-$ systemctl start restic-backup
+$ systemctl start directadmin-vps-backup
 ```
 
 You can follow the backup stdout output live as backup is running with:
