@@ -1,49 +1,11 @@
-#!/usr/bin/env bash
-# Make backup my system with restic to Backblaze B2.
-# This script is typically run by: /etc/systemd/system/restic-backup.{service,timer}
-
-# Exit on failure, pipe failure
-set -e -o pipefail
-
-# Clean up lock if we are killed.
-# If killed by systemd, like $(systemctl stop restic), then it kills the whole cgroup and all it's subprocesses.
-# However if we kill this script ourselves, we need this trap that kills all subprocesses manually.
-exit_hook() {
-	echo "In exit_hook(), being killed" >&2
-	jobs -p | xargs kill
-	restic unlock
-}
-trap exit_hook INT TERM
-
-# Run Daily MySQL Backups
-bash /usr/local/sbin/mysql.sh &
-wait $!
-
-# How many backups to keep.
-RETENTION_DAYS=1
-RETENTION_WEEKS=7
-RETENTION_MONTHS=12
-RETENTION_YEARS=1
-
-# What to backup, and what to not
-BACKUP_PATHS="/ /boot /home"
-[ -d /mnt/media ] && BACKUP_PATHS+=" /mnt/media"
-BACKUP_EXCLUDES="--exclude-file /etc/restic/backup_exclude"
-for dir in /home/*
-do
-	if [ -f "$dir/.backup_exclude" ]
-	then
-		BACKUP_EXCLUDES+=" --exclude-file $dir/.backup_exclude"
-	fi
-done
-
-BACKUP_TAG=systemd.timer
-
 
 # Set all environment variables like
 # B2_ACCOUNT_ID, B2_ACCOUNT_KEY, RESTIC_REPOSITORY etc.
 source /etc/restic/aws-env.sh
 
+# Run Daily MySQL Backups
+bash /usr/local/sbin/mysql.sh &
+wait $!
 
 # NOTE start all commands in background and wait for them to finish.
 # Reason: bash ignores any signals while child process is executing and thus my trap exit hook is not triggered.
@@ -59,26 +21,27 @@ wait $!
 # --one-file-system makes sure we only backup exactly those mounted file systems specified in $BACKUP_PATHS, and thus not directories like /dev, /sys etc.
 # --tag lets us reference these backups later when doing restic-forget.
 restic backup \
-	--verbose \
-	--one-file-system \
-	--tag $BACKUP_TAG \
-	$BACKUP_EXCLUDES \
-	$BACKUP_PATHS &
+        --verbose \
+        --one-file-system \
+        --tag $BACKUP_TAG \
+        --option b2.connections=$B2_CONNECTIONS \
+        $BACKUP_EXCLUDES \
+        $BACKUP_PATHS &
 wait $!
 
 # Dereference and delete/prune old backups.
 # See restic-forget(1) or http://restic.readthedocs.io/en/latest/060_forget.html
 # --group-by only the tag and path, and not by hostname. This is because I create a B2 Bucket per host, and if this hostname accidentially change some time, there would now be multiple backup sets.
 restic forget \
-	--verbose \
-	--tag $BACKUP_TAG \
-	--option b2.connections=$B2_CONNECTIONS \
+        --verbose \
+        --tag $BACKUP_TAG \
+        --option b2.connections=$B2_CONNECTIONS \
         --prune \
-	--group-by "paths,tags" \
-	--keep-daily $RETENTION_DAYS \
-	--keep-weekly $RETENTION_WEEKS \
-	--keep-monthly $RETENTION_MONTHS \
-	--keep-yearly $RETENTION_YEARS &
+        --group-by "paths,tags" \
+        --keep-daily $RETENTION_DAYS \
+        --keep-weekly $RETENTION_WEEKS \
+        --keep-monthly $RETENTION_MONTHS \
+        --keep-yearly $RETENTION_YEARS &
 wait $!
 
 # Check repository for errors.
@@ -86,5 +49,6 @@ wait $!
 #restic check &
 #wait $!
 
-echo "Backup & cleaning is done."
-echo "testing message $BACKUP_TAG" | mail -s "message subject" geertjan@hostingwalk.com
+RESTICOUTPUT=`restic snapshots --repo ${RESTIC_REPOSITORY}`
+HOSTNAME=`hostname`
+echo "Backup ${HOSTNAME} has finished, we keep ${RETENTION_DAYS} each day. \n ${RESTICOUTPUT}" | mail -s "Backup done ${HOSTNAME}" info@e-volve.nl geertjan@hostingwalk.com
