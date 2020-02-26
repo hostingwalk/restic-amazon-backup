@@ -1,7 +1,7 @@
 
 # Set all environment variables like
 # B2_ACCOUNT_ID, B2_ACCOUNT_KEY, RESTIC_REPOSITORY etc.
-source /etc/restic/aws-env.sh
+source /etc/restic/env.sh
 
 # Run Daily MySQL Backups
 bash /usr/local/sbin/mysql.sh &
@@ -24,7 +24,6 @@ restic backup \
         --verbose \
         --one-file-system \
         --tag $BACKUP_TAG \
-        --option b2.connections=$B2_CONNECTIONS \
         $BACKUP_EXCLUDES \
         $BACKUP_PATHS &
 wait $!
@@ -35,7 +34,6 @@ wait $!
 restic forget \
         --verbose \
         --tag $BACKUP_TAG \
-        --option b2.connections=$B2_CONNECTIONS \
         --prune \
         --group-by "paths,tags" \
         --keep-daily $RETENTION_DAYS \
@@ -51,4 +49,4 @@ wait $!
 
 RESTICOUTPUT=`restic snapshots --repo ${RESTIC_REPOSITORY}`
 HOSTNAME=`hostname`
-echo "Backup ${HOSTNAME} has finished, we keep ${RETENTION_DAYS} each day. \n ${RESTICOUTPUT}" | mail -s "Backup done ${HOSTNAME}" info@e-volve.nl geertjan@hostingwalk.com
+echo "Backup ${HOSTNAME} has finished, we keep ${RETENTION_DAYS} each day. \n ${RESTICOUTPUT}" | mail -s "Backup done ${HOSTNAME}" geertjan@hostingwalk.com
