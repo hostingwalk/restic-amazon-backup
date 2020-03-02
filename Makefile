@@ -31,11 +31,11 @@ install-scripts:
 	install -m 0744 $(SRCS_SCRIPTS) $(DEST_SCRIPTS)
 
 etc/restic/b2_env.sh:
-	install -m 0600 etc/restic/aws-env.sh.template etc/restic/aws-env.sh
+	install -m 0600 etc/restic/env.sh.template etc/restic/env.sh
 
 # target: install-conf - Install restic configuration files.
 # will create these files locally only if they don't already exist
-install-conf: | etc/restic/aws-env.sh
+install-conf: | etc/restic/env.sh
 	install -d $(DEST_CONF)
 	install -m 0600 $(SRCS_CONF) $(DEST_CONF)
 
