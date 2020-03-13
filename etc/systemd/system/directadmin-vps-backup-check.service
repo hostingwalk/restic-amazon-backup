@@ -7,4 +7,5 @@ Requires=nm-unmetered-connection.service
 [Service]
 Type=simple
 Nice=10
+KillMode=process
 ExecStart=/usr/local/sbin/restic_check.sh
