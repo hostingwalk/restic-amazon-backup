@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 # Make backup my system with restic
 
+## declare mail variables
+##email subject 
+subject="Backup done ${HOSTNAME}"
+## sending mail to
+to="geertjan@hostingwalk.com"
+
 # Exit on failure, pipe failure
 set -e -o pipefail
 
@@ -89,4 +95,4 @@ wait $!
 
 RESTICOUTPUT=`restic snapshots --repo ${RESTIC_REPOSITORY}`
 HOSTNAME=`hostname`
-echo "Backup ${HOSTNAME} has finished, we keep ${RETENTION_DAYS} each day. \n ${RESTICOUTPUT}" | mail -s "Backup done ${HOSTNAME}" geertjan@hostingwalk.com
+echo -e "Backup ${HOSTNAME} has finished, we keep ${RETENTION_DAYS} backups. \n ${RESTICOUTPUT}" | mail -s "$subject" "$to"
