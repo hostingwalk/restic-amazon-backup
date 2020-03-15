@@ -1,10 +1,12 @@
 ## Directadmin VPS Backup solution using S3 Block Storage and Restic agent to backup automaticly via systemd timers and with backup email notifications.
 
-## Powered by Restic
+## Required: Install Restic
 
 [restic](https://restic.net/) is a command-line tool for making backups.
 
-Unfortunately restic does not come pre-configured with a way to run automated backups.
+```bash
+$ yum install yum-plugin-copr && yum copr enable copart/restic && yum install restic
+````
 
 ## Installguide Directadmin VPS Backup
 
