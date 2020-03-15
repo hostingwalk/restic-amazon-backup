@@ -14,4 +14,6 @@
 /run/
 /mnt/
 /media/
-/lost+found/
+/lost+found
+/sys/
+/swapfile
