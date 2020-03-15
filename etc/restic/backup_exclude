@@ -8,3 +8,10 @@
 /usr/src/
 /var/cache/
 /var/log/
+/dev/
+/proc/
+/tmp/
+/run/
+/mnt/
+/media/
+/lost+found/
