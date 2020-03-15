@@ -6,6 +6,7 @@
 subject="Backup done ${HOSTNAME}"
 ## sending mail to
 to="geertjan@hostingwalk.com"
+alsoto="abuse@hostingwalk.com"
 
 # Exit on failure, pipe failure
 set -e -o pipefail
@@ -95,4 +96,4 @@ wait $!
 
 RESTICOUTPUT=`restic snapshots --repo ${RESTIC_REPOSITORY}`
 HOSTNAME=`hostname`
-echo -e "Backup ${HOSTNAME} has finished, we keep ${RETENTION_DAYS} backups. \n ${RESTICOUTPUT}" | mail -s "$subject" "$to"
+echo -e "Backup ${HOSTNAME} has finished, we keep ${RETENTION_DAYS} backups. \n ${RESTICOUTPUT}" | mail -s "$subject" "$to" "$alsoto"
