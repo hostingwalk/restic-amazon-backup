@@ -6,6 +6,7 @@ Requires=nm-unmetered-connection.service
 [Service]
 Type=simple
 Nice=10
+KillMode=process
 ExecStart=/usr/local/sbin/directadmin-vps-backup.sh
 # $HOME or $XDG_CACHE_HOME must be set for restic to find /root/.cache/restic/
 Environment="HOME=/root"
