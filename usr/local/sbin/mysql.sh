@@ -8,6 +8,12 @@ TODAY=`date +"%Y%m%d"`
 
 #OUTPUT="/Users/rabino/DBs"
 
+if [[ ! -e ${DB_BACKUP_PATH} ]]; then
+    mkdir ${DB_BACKUP_PATH}
+elif [[ ! -d ${DB_BACKUP_PATH} ]]; then
+    echo "${DB_BACKUP_PATH} already exists but is not a directory" 1>&2
+fi
+
 find ${DB_BACKUP_PATH} -name '*.gz' -type f -mtime +${BACKUP_RETAIN_DAYS} -exec rm -f {} \;
 
 databases=`mysql -u $USER -p$PASSWORD -e "SHOW DATABASES;" | tr -d "| " | grep -v Database`
