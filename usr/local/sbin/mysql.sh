@@ -21,7 +21,7 @@ databases=`mysql -u $USER -p$PASSWORD -e "SHOW DATABASES;" | tr -d "| " | grep -
 for db in $databases; do
     if [[ "$db" != "information_schema" ]] && [[ "$db" != "performance_schema" ]] && [[ "$db" != "mysql" ]] && [[ "$db" != _* ]] ; then
         echo "Dumping database: $db"
-        mysqldump -u $USER -p$PASSWORD --databases $db | gzip > ${TODAY}.$db.sql.gz
+        mysqldump -u $USER -p$PASSWORD --databases $db | gzip > {DB_BACKUP_PATH}/${TODAY}.$db.sql.gz
        # gzip $OUTPUT/`date +%Y%m%d`.$db.sql
     fi
 done
