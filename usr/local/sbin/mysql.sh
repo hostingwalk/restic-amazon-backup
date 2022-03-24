@@ -2,7 +2,7 @@
 
 USER="da_admin"
 PASSWORD="`grep passwd= /usr/local/directadmin/conf/mysql.conf | cut -d\= -f2`"
-BACKUP_RETAIN_DAYS=1   ## Number of days to keep local backup copy
+BACKUP_RETAIN_DAYS=0   ## Number of days to keep local backup copy
 DB_BACKUP_PATH='/home/mysqlbackups'
 TODAY=`date +"%Y%m%d"`
 
