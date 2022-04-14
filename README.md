@@ -5,7 +5,7 @@
 [restic](https://restic.net/) is a command-line tool for making backups.
 
 ```bash
-$ yum install yum-plugin-copr && yum copr enable copart/restic && yum install restic
+$ yum install yum-plugin-copr && yum copr enable copart/restic && yum install restic && yum install git
 ````
 
 ## Installguide Directadmin VPS Backup
