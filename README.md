@@ -30,8 +30,7 @@ $ restic snapshots    # You don't have to supply all parameters like --repo, as 
 ### 2. Initialize remote repo
 Now we must initialize the repository on the remote end:
 ```bash
-source /etc/restic/env.sh
-restic init
+source /etc/restic/env.sh && restic init
 ```
 
 ### 3. Script for doing the backup
