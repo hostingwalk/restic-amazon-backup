@@ -1,4 +1,4 @@
-## Directadmin VPS Backup solution using S3 Block Storage and Restic agent to backup automaticly via systemd timers and with backup email notifications.
+## Directadmin Restic Backup using S3 Block Storage
 
 ## Required: Install Restic
 
