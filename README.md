@@ -7,7 +7,7 @@
 ```bash
 $ yum install yum-plugin-copr && yum copr enable copart/restic && yum install restic && yum install git
 
-sudo apt update && sudo apt install -y software-properties-common && sudo add-apt-repository -y ppa:copart/restic && sudo apt update && sudo apt install -y restic git
+sudo apt-get update && sudo apt-get install -y software-properties-common && sudo add-apt-repository -y ppa:copart/restic && sudo apt-get update && sudo apt-get install -y restic git
 ````
 
 ## Installguide Directadmin VPS Backup
