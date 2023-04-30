@@ -1,5 +1,8 @@
 ## Directadmin Restic Backup using S3 Block Storage
 
+# Requirements
+* `restic >=v0.9.6`
+
 ## Required: Install Restic
 
 [restic](https://restic.net/) is a command-line tool for making backups.
