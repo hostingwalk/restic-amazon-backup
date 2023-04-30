@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
 # Make backup my system with restic
 
-## declare mail variables
-##email subject 
-subject="Backup done ${HOSTNAME}"
-## sending mail to
-to="geertjan@hostingwalk.com"
-alsoto="abuse@hostingwalk.com"
+## add your discord channel webhook
+discord="URL"
 
 # Exit on failure, pipe failure
 set -e -o pipefail
@@ -23,9 +19,9 @@ trap exit_hook INT TERM
 
 # How many backups to keep.
 RETENTION_DAYS=7
-RETENTION_WEEKS=1
-RETENTION_MONTHS=12
-RETENTION_YEARS=1
+RETENTION_WEEKS=4
+RETENTION_MONTHS=3
+RETENTION_YEARS=0
 
 # What to backup, and what to not
 BACKUP_PATHS="/ /boot /home"
@@ -94,6 +90,10 @@ wait $!
 #restic check &
 #wait $!
 
-RESTICOUTPUT=`restic snapshots --repo ${RESTIC_REPOSITORY}`
+RESTICSNAPSHOTS="restic snapshots --no-lock --json --repo ${RESTIC_REPOSITORY}"
+RESTICOUTPUT=$(eval "$RESTICSNAPSHOTS" | grep -oP '"short_id":"\K[0-9a-f]+|"time":"\K[^"]+' | paste -d' ' - - | sed 's/T/ /; s/\.\(.*\)Z/\1/' )
+COUNT=$(eval $RESTICSNAPSHOTS | wc -l)
 HOSTNAME=`hostname`
-echo -e "Backup ${HOSTNAME} has finished, we keep ${RETENTION_DAYS} backups. \n ${RESTICOUTPUT}" | mail -s "$subject" "$to" "$alsoto"
+
+CURL_COMMAND='{"content": "Backup '${HOSTNAME}' has finished, you have now '${COUNT}' backups."}'
+curl -H "Content-Type: application/json" -X POST -d "$CURL_COMMAND" "$discord"
