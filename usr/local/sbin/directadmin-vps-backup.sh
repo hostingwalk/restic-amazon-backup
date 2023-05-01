@@ -92,8 +92,10 @@ wait $!
 
 RESTICSNAPSHOTS="restic snapshots --no-lock --json --repo ${RESTIC_REPOSITORY}"
 RESTICOUTPUT=$(eval "$RESTICSNAPSHOTS" | grep -oP '"short_id":"\K[0-9a-f]+|"time":"\K[^"]+' | paste -d' ' - - | sed 's/T/ /; s/\.\(.*\)Z/\1/' )
-COUNT=$(eval $RESTICSNAPSHOTS | wc -l)
+COUNT=$(restic snapshots --compact --repo ${RESTIC_REPOSITORY} | awk -F '\t' '{print $1}' | wc -l)
 HOSTNAME=`hostname`
+
+
 
 CURL_COMMAND='{"content": "Backup '${HOSTNAME}' has finished, you have now '${COUNT}' backups."}'
 curl -H "Content-Type: application/json" -X POST -d "$CURL_COMMAND" "$discord"
