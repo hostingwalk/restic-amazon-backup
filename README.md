@@ -2,6 +2,7 @@
 
 # Requirements
 * `restic >=v0.9.6`
+* `zstd:  for mysql backups`
 
 ## Required: Install Restic
 
