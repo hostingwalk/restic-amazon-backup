@@ -4,6 +4,17 @@
 ## add your discord channel webhook
 discord="URL"
 
+# Check available disk space
+total_space=$(df -H | awk '{if($NF=="/") print $2}' | tr -d 'G')
+free_space=$(df -H | awk '{if($NF=="/") print $4}' | tr -d 'G')
+required_space=$(du -sh /var/lib/mysql | tr -d 'G' | awk '{print $1}')
+if (( $(echo "$free_space < $required_space" | bc -l) )); then
+    echo "Error: Not enough disk space. Available space: ${free_space}G, Required space: ${required_space}G"
+BACKUP_ERROR='{"content": "Backup '${HOSTNAME}' has failed, Error: Not enough disk space. Available space: '${free_space}' GB required space is: '${required_space}' GB "}'
+curl -H "Content-Type: application/json" -X POST -d "$BACKUP_ERROR" "$discord"    
+exit 1
+fi
+
 # Exit on failure, pipe failure
 set -e -o pipefail
 
