@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # Make backup my system with restic
 
+# Run first Directadmin Cleaner
+bash /usr/local/sbin/directadmin-cleaner.sh &
+wait $!
+
 ## add your discord channel webhook
 discord="URL"
 
