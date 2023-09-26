@@ -8,6 +8,14 @@
 
 [restic](https://restic.net/) is a command-line tool for making backups.
 
+Ubuntu:
+```bash
+$ apt-get install restic && apt-get install git
+
+sudo apt-get update && sudo apt-get install -y software-properties-common && sudo add-apt-repository -y ppa:copart/restic && sudo apt-get update && sudo apt-get install -y restic git
+````
+
+CentOS:
 ```bash
 $ yum install yum-plugin-copr && yum copr enable copart/restic && yum install restic && yum install git
 
